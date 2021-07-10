@@ -1,0 +1,63 @@
+<ion-content [ngClass]="{'default': !showFeedback(), 'success': showFeedback() && slideInfo[currentSlide].stage == Stage.CORRECT, 'failure': showFeedback() && slideInfo[currentSlide].stage == Stage.INCORRECT}">
+
+  <ion-progress-bar style="margin-top: 0px" value={{progressPercent}}></ion-progress-bar>
+
+  <span *ngIf="!scoreCardDisplayed()">
+    <div class="score-banner"><b>Score: {{score}}/{{progressPercent * taskLength}}</b></div>
+    <div class="score-change">+1</div>
+  </span>
+
+  <div *ngIf="slideInfo[currentSlide].stage == Stage.START" (click)="startMemorizeTimer()" class="overlay" button>
+    <div class="overlay-content">
+      Click anywhere to reveal
+    </div>
+  </div>
+
+  <ion-slides #slideElement (ionSlideDidChange)="changeSlide()">
+
+    <ion-slide *ngFor="let slide of slideInfo; let slideIndex = index" (swipeleft)="selectFace(true)" (swiperight)="selectFace(false)" class="flex-slide">
+
+      <div class="prompt" *ngIf="slideInfo[slideIndex].stage == Stage.START">Memorize the face: {{memorizeTime}}</div>
+      <div class="prompt" *ngIf="slideInfo[slideIndex].stage == Stage.MEMORIZE">Memorize the face: <span class="time-left">{{timeRemaining}}</span></div>
+      <div class="prompt" *ngIf="slideInfo[slideIndex].stage == Stage.MASK">Hold the face in your mind...</div>
+      <div class="prompt" *ngIf="slideInfo[slideIndex].stage == Stage.SELECT">Is this the same person?</div>
+      <div class="prompt" *ngIf="slideInfo[slideIndex].stage == Stage.CORRECT">Correct!</div>
+      <div class="prompt" *ngIf="slideInfo[slideIndex].stage == Stage.INCORRECT">Incorrect!</div>
+
+      <ion-card *ngIf="slideInfo[slideIndex].stage != Stage.CORRECT && slideInfo[slideIndex].stage != Stage.INCORRECT" class="swipe-card">
+        <ion-icon *ngIf="slideInfo[slideIndex].stage == Stage.SELECT" (click)="selectFace(false)" color="dark" name="arrow-back" style="font-size: 150%"></ion-icon>
+        <img *ngIf="slideInfo[slideIndex].stage != Stage.START" [src]="getSrc(slideIndex)" style="height: 270px" [ngStyle]="{'width': slideInfo[slideIndex].stage == Stage.MASK ? '85%' : 'auto'}"/>
+        <ion-icon *ngIf="slideInfo[slideIndex].stage == Stage.SELECT" (click)="selectFace(true)" color="dark" name="arrow-forward" style="font-size: 150%"></ion-icon>
+      </ion-card>
+
+      <div *ngIf="slideInfo[slideIndex].stage != Stage.CORRECT && slideInfo[slideIndex].stage != Stage.INCORRECT" class="swipe-footer">
+        <ion-button (click)="selectFace(true)" color="primary">Same</ion-button>
+        <ion-button (click)="selectFace(false)" color="secondary">Different</ion-button>
+      </div>
+
+      <div *ngIf="slideInfo[slideIndex].stage == Stage.CORRECT || slideInfo[slideIndex].stage == Stage.INCORRECT" style="height: 100%; width: 100%; padding-top: 20%; text-align: center; margin: 0 auto">
+        <div *ngIf="slideInfo[slideIndex].correctFace == slideInfo[slideIndex].displayedFace" class="subheader">Same</div>
+        <div *ngIf="slideInfo[slideIndex].correctFace != slideInfo[slideIndex].displayedFace" class="subheader">Different</div>
+        <ion-card class="grid-card" style="--background: gainsboro;">
+          <img [src]="slideInfo[slideIndex].correctFace">
+        </ion-card>
+        <ion-card class="grid-card" style="--background: gainsboro;">
+          <img [src]="slideInfo[slideIndex].displayedFace">
+        </ion-card>
+
+        <ion-item class="footer" lines="none" style="margin-top: 30%">
+          <ion-label>Swipe to Continue</ion-label>
+          <ion-icon slot="end" color="dark" name="arrow-back" style="margin-top: 10px"></ion-icon>    
+        </ion-item>
+      </div>
+
+    </ion-slide>
+
+   <!--Score page-->
+    <ion-slide>
+      <app-score-page [score]="score" [length]="taskLength" [assessment]="true" (finished)="finished.emit([score, 2])"></app-score-page>
+    </ion-slide>
+
+  </ion-slides>
+
+</ion-content>

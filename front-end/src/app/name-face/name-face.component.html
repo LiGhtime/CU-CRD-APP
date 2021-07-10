@@ -1,0 +1,67 @@
+<ion-content [ngClass]="{'default': !showFeedback(), 'success': showFeedback() && slideInfo[currentSlide].stage == Stage.CORRECT, 'failure': showFeedback() && slideInfo[currentSlide].stage == Stage.INCORRECT}">
+
+  <ion-progress-bar style="margin-top: 0px" value={{progressPercent}}></ion-progress-bar>
+
+  <span *ngIf="!scoreCardDisplayed()">
+    <div class="score-banner"><b>Score: {{score}}/{{progressPercent * taskLength}}</b></div>
+    <div class="score-change">+1</div>
+  </span>
+
+  <ion-slides #slideElement (ionSlideDidChange)="changeSlide()">
+
+    <ion-slide *ngFor="let slide of slideInfo; let slideIndex = index">
+
+      <div class="flex-slide">
+
+        <div class="prompt" *ngIf="slideIndex != currentSlide || !showFeedback()">Who is <b>{{slideInfo[slideIndex].correctName}}</b>?</div>
+        <div class="prompt" *ngIf="showFeedback() && slideInfo[slideIndex].stage == Stage.CORRECT">Correct!</div>
+        <div class="prompt" *ngIf="showFeedback() && slideInfo[slideIndex].stage == Stage.INCORRECT">Incorrect!</div>
+
+        <div>
+
+          <div style="display: flex; justify-content: center">
+
+            <div *ngFor="let item of [].constructor(3); let i = index" style="margin-left: 10px; margin-right: 10px">
+
+              <ion-card [button]="!showFeedback()" class="grid-card" (click)="selectFace(slideInfo[slideIndex].faces[i])" [ngClass]="{'selected-wrong-card': showSelected(i) && slideIndex == currentSlide, 'disabled-card': showDisabled(i) && slideIndex == currentSlide}">
+                <img *ngIf="slideIndex <= currentSlide" [src]="slideInfo[slideIndex].faces[i]"/>
+              </ion-card>
+
+              <div style="height: 25px; color: white">{{slideIndex == currentSlide ? getName(i) : ''}}</div>
+
+            </div>
+
+          </div>
+          <div style="display: flex; justify-content: center; margin-top: 10px">
+
+            <div *ngFor="let item of [].constructor(3); let i = index" style="margin-left: 10px; margin-right: 10px">
+
+              <ion-card [button]="!showFeedback()" class="grid-card" (click)="selectFace(slideInfo[slideIndex].faces[i + 3])" [ngClass]="{'selected-wrong-card': showSelected(i + 3) && slideIndex == currentSlide, 'disabled-card': showDisabled(i + 3) && slideIndex == currentSlide}">
+                <img *ngIf="slideIndex <= currentSlide" [src]="slideInfo[slideIndex].faces[i + 3]"/>
+              </ion-card>
+
+              <div style="height: 25px; color: white">{{slideIndex == currentSlide ? getName(i + 3) : ''}}</div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <ion-item class="footer" lines="none">
+          <ion-label>Swipe to Continue</ion-label>
+          <ion-icon slot="end" color="medium" name="arrow-back" style="margin-top: 10px"></ion-icon>    
+        </ion-item>
+
+      </div>
+
+    </ion-slide>
+
+   <!--Score page-->
+    <ion-slide>
+      <app-score-page [score]="score" [length]="taskLength" [assessment]="false" (finished)="finish($event)"></app-score-page>
+    </ion-slide>
+
+  </ion-slides>
+
+</ion-content>

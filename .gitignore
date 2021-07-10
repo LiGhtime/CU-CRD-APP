@@ -1,0 +1,10 @@
+/node_modules
+
+auth.json
+
+/.vscode
+
+*.key
+
+*.key.pub
+**/.DS_Store
