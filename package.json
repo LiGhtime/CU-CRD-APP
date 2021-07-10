@@ -16,7 +16,7 @@
     "jsonwebtoken": "^8.5.1",
     "pg": "^7.18.2"
   },
-   "engines": {
+  "engines": {
     "node": "^12"
   }
 }
