@@ -1,0 +1,9 @@
+npm install
+npm audit fix
+npm i angular-cli-ghpages --save
+npm audit fix
+ng add angular-cli-ghpages
+ionic build --prod -- --base-href https://LiGhtime.github.io/CU-CRD-APP
+npx angular-cli-ghpages --dir=www
+chage 404.html and index.html href:   <base href="https://lightime.github.io/CU-CRD-APP/">
+add .nojekyll file
