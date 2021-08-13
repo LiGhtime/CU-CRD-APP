@@ -1,9 +1,18 @@
+cd .\front-end\
+
 npm install
 npm audit fix
 npm i angular-cli-ghpages --save
 npm audit fix
 ng add angular-cli-ghpages
-ionic build --prod -- --base-href https://LiGhtime.github.io/CU-CRD-APP
-npx angular-cli-ghpages --dir=www
+
+ionic build --prod -- --base-href https://CU-CRD-app.github.io/psych-capstone || https://LiGhtime.github.io/CU-CRD-APP
+
+npm install -g @angular/cli
+npm install --save-dev @angular-devkit/build-angular
+npm i @babel/compat-data@7.8.0
+npm audit fix
+
+npx angular-cli-ghpages --dir=www --no-silent
 chage 404.html and index.html href:   <base href="https://lightime.github.io/CU-CRD-APP/"> || <base href="https://CU-CRD-app.github.io/psych-capstone/">
 add .nojekyll file
