@@ -19,7 +19,13 @@ Dev Team Year 1: <br>
   alsa6908@colorado.edu <br>
   ka.chen@colorado.edu <br>
   mahon@colorado.edu <br>
-  
+
+## Web version
+https://cu-crd-app.github.io/psych-capstone/login
+
+## Presentation Video
+https://youtu.be/JxlqNV0ncsE
+
 ## Front end
 
 Run this from the front-end directory to start the app:
